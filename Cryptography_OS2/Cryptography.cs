@@ -28,7 +28,7 @@ namespace Cryptography_OS2
 
         private string Open_Text(string textfile)
         {
-            string path = AppDomain.CurrentDomain.BaseDirectory + textfile;
+            string path = @"C:\Users\Tomek\Desktop\OS2 projekt\Cryptography_OS2\Crypto files\" + textfile;
             string fulltext = "";
 
             if (!File.Exists(path))
@@ -48,7 +48,7 @@ namespace Cryptography_OS2
 
         private void Save_Text(string filename, string text)
         {
-            string path = AppDomain.CurrentDomain.BaseDirectory + filename;
+            string path = @"C:\Users\Tomek\Desktop\OS2 projekt\Cryptography_OS2\Crypto files\" + filename;
             using (StreamWriter sw = File.CreateText(path))
             {
                 sw.Write(text);
@@ -124,6 +124,7 @@ namespace Cryptography_OS2
                 SoapHexBinary shb = new SoapHexBinary(aes.Key);
                 textBoxAesKey.Text = shb.ToString();
             }
+            if (!String.IsNullOrWhiteSpace(textBoxAesKey.Text)) btnSaveSecretKey.PerformClick();
         }
 
         private void btnOpenSecretKey_Click(object sender, EventArgs e)
@@ -292,21 +293,21 @@ namespace Cryptography_OS2
         {
             var keypairs = VirgilKeyPair.Generate(VirgilKeyPair.Type.RSA_2048);
 
-            string pathpubkey = AppDomain.CurrentDomain.BaseDirectory + "javni_kljuc.txt";
+            string pathpubkey = @"C:\Users\Tomek\Desktop\OS2 projekt\Cryptography_OS2\Crypto files\javni_kljuc.txt";
             File.WriteAllBytes(pathpubkey, keypairs.PublicKey());
 
-            string pathprivkey = AppDomain.CurrentDomain.BaseDirectory + "privatni_kljuc.txt";
+            string pathprivkey = @"C:\Users\Tomek\Desktop\OS2 projekt\Cryptography_OS2\Crypto files\privatni_kljuc.txt";
             File.WriteAllBytes(pathprivkey, keypairs.PrivateKey());
 
-            btnOpenRSAKeys.PerformClick();
+            if (File.Exists(pathpubkey) && File.Exists(pathprivkey)) btnOpenRSAKeys.PerformClick();
         }
         private void btnOpenRSAKeys_Click(object sender, EventArgs e)
         {
-            string uneditedpublic = Open_Text("javni_kljuc.txt");
-            textBoxPublicKey.Text = uneditedpublic.Substring(27, 399);
-
-            string uneditedprivate = Open_Text("privatni_kljuc.txt");
-            textBoxPrivateKey.Text = uneditedprivate.Substring(32, 1613);
+            string publickey = Open_Text("javni_kljuc.txt");
+            string privatekey = Open_Text("privatni_kljuc.txt");
+            if (!String.IsNullOrEmpty(publickey)) textBoxPublicKey.Text = publickey;
+            if (!String.IsNullOrEmpty(privatekey)) textBoxPrivateKey.Text = privatekey;
+            else toolStripStatusLabel1.Text = "Datoteke javnog i/ili privatnog kljuca ne postoje!";
         }
 
         private void btnSaveRSAKeys_Click(object sender, EventArgs e)
@@ -330,23 +331,67 @@ namespace Cryptography_OS2
             textBoxPrivateKey.Clear();
         }
 
+        //RSA enkripcija
         private void btnCryptRSA_Click(object sender, EventArgs e)
         {
-            string cleantext = Open_Text("cisti_tekst.txt");
-            string publickeytext = textBoxPublicKey.Text;
-            var publickey = Convert.FromBase64String(publickeytext);
-            string encryptedtext = CryptoHelper.Encrypt(cleantext, "RecipientID" , publickey);
-            Save_Text("kriptirani_tekst.txt", encryptedtext);
-            textBoxCryptoText.Text = encryptedtext;
+            try
+            {
+                string cleantext = Open_Text("cisti_tekst.txt");
+                if (String.IsNullOrEmpty(cleantext)) return;
+                textBoxCleanText.Text = cleantext;
+
+                string pubkey = Open_Text("javni_kljuc.txt");
+                if (String.IsNullOrEmpty(pubkey)) return;
+                byte[] publickey = Encoding.ASCII.GetBytes(pubkey);
+                textBoxPublicKey.Text = pubkey;
+
+                string encryptedtext = CryptoHelper.Encrypt(cleantext, "RecipientID", publickey);
+                if (String.IsNullOrEmpty(encryptedtext)) return;
+                Save_Text("kriptirani_tekst.txt", encryptedtext);
+                textBoxCryptoText.Text = encryptedtext;
+            }
+            catch (Exception)
+            {
+                toolStripStatusLabel1.Text = "Greška! Provjerite datoteke cistog teksta i javnog kljuca!";
+                return;
+            }
+            toolStripStatusLabel1.Text = "Datoteka je uspješno kriptirana";
         }
 
+
+        //RSA dekripcija
         private void btnDecryptRSA_Click(object sender, EventArgs e)
         {
-            string cryptedtext = Open_Text("kriptirani_tekst.txt");
-            string privatekeytext = textBoxPrivateKey.Text;
-            var privatekey = Convert.FromBase64String(privatekeytext);
-            string decryptedText = CryptoHelper.Decrypt(cryptedtext, "RecipientID", privatekey);
+            string decryptedText;
+            try
+            {
+                string cryptedtext = Open_Text("kriptirani_tekst.txt");
+                if (String.IsNullOrEmpty(cryptedtext)) return;
+                textBoxCryptoText.Text = cryptedtext;
+
+                string privkey = Open_Text("privatni_kljuc.txt");
+                if (String.IsNullOrEmpty(privkey)) return;
+                byte[] privatekey = Encoding.ASCII.GetBytes(privkey);
+                textBoxPrivateKey.Text = privkey;
+
+                decryptedText = CryptoHelper.Decrypt(cryptedtext, "RecipientID", privatekey);
+                if(String.IsNullOrEmpty(decryptedText)) return;
+            }
+            catch (Exception)
+            {
+                toolStripStatusLabel1.Text = "Greška! Provjerite datoteke kriptiranog teksta i privatnog kljuca!";
+                return;
+            }
+            if (decryptedText != Open_Text("cisti_tekst.txt"))
+            {
+                toolStripStatusLabel1.Text = "Dekriptirani tekst ne odgovara orginalnom tekstu!";
+            }
+            else
+            {
+                toolStripStatusLabel1.Text = "Dekriptiranje je uspješno završeno";
+            }
             textBoxCleanText.Text = decryptedText;
         }
+
     }
 }
