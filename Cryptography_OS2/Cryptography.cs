@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Virgil.Crypto;
 
 namespace Cryptography_OS2
 {
@@ -28,7 +29,6 @@ namespace Cryptography_OS2
         private string Open_Text(string textfile)
         {
             string path = AppDomain.CurrentDomain.BaseDirectory + textfile;
-            string textline = "";
             string fulltext = "";
 
             if (!File.Exists(path))
@@ -141,7 +141,7 @@ namespace Cryptography_OS2
             else
             {
                 Save_Text("tajni_kljuc.txt", textBoxAesKey.Text);
-                toolStripStatusLabel1.Text = "Datoteka tajni_kljuc.txt je kreirana!";
+                toolStripStatusLabel1.Text = "Datoteka tajni_kljuc.txt je spremljena!";
             }
         }
 
@@ -290,12 +290,23 @@ namespace Cryptography_OS2
         //RSA funkcionalnosti buttona
         private void btnGenerateKeyPairsRSA_Click(object sender, EventArgs e)
         {
-            
+            var keypairs = VirgilKeyPair.Generate(VirgilKeyPair.Type.RSA_2048);
+
+            string pathpubkey = AppDomain.CurrentDomain.BaseDirectory + "javni_kljuc.txt";
+            File.WriteAllBytes(pathpubkey, keypairs.PublicKey());
+
+            string pathprivkey = AppDomain.CurrentDomain.BaseDirectory + "privatni_kljuc.txt";
+            File.WriteAllBytes(pathprivkey, keypairs.PrivateKey());
+
+            btnOpenRSAKeys.PerformClick();
         }
         private void btnOpenRSAKeys_Click(object sender, EventArgs e)
         {
-            textBoxPublicKey.Text = Open_Text("javni_kljuc.txt");
-            textBoxPrivateKey.Text = Open_Text("privatni_kljuc.txt");
+            string uneditedpublic = Open_Text("javni_kljuc.txt");
+            textBoxPublicKey.Text = uneditedpublic.Substring(27, 399);
+
+            string uneditedprivate = Open_Text("privatni_kljuc.txt");
+            textBoxPrivateKey.Text = uneditedprivate.Substring(32, 1613);
         }
 
         private void btnSaveRSAKeys_Click(object sender, EventArgs e)
@@ -317,6 +328,25 @@ namespace Cryptography_OS2
         {
             textBoxPublicKey.Clear();
             textBoxPrivateKey.Clear();
+        }
+
+        private void btnCryptRSA_Click(object sender, EventArgs e)
+        {
+            string cleantext = Open_Text("cisti_tekst.txt");
+            string publickeytext = textBoxPublicKey.Text;
+            var publickey = Convert.FromBase64String(publickeytext);
+            string encryptedtext = CryptoHelper.Encrypt(cleantext, "RecipientID" , publickey);
+            Save_Text("kriptirani_tekst.txt", encryptedtext);
+            textBoxCryptoText.Text = encryptedtext;
+        }
+
+        private void btnDecryptRSA_Click(object sender, EventArgs e)
+        {
+            string cryptedtext = Open_Text("kriptirani_tekst.txt");
+            string privatekeytext = textBoxPrivateKey.Text;
+            var privatekey = Convert.FromBase64String(privatekeytext);
+            string decryptedText = CryptoHelper.Decrypt(cryptedtext, "RecipientID", privatekey);
+            textBoxCleanText.Text = decryptedText;
         }
     }
 }

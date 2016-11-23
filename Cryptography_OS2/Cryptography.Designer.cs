@@ -212,7 +212,7 @@
             this.tabControl1.Location = new System.Drawing.Point(192, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(515, 272);
+            this.tabControl1.Size = new System.Drawing.Size(515, 260);
             this.tabControl1.TabIndex = 14;
             // 
             // tabAES
@@ -300,14 +300,14 @@
             this.tabRSA.Location = new System.Drawing.Point(4, 25);
             this.tabRSA.Name = "tabRSA";
             this.tabRSA.Padding = new System.Windows.Forms.Padding(3);
-            this.tabRSA.Size = new System.Drawing.Size(507, 243);
+            this.tabRSA.Size = new System.Drawing.Size(507, 231);
             this.tabRSA.TabIndex = 1;
             this.tabRSA.Text = "Asimetrično(RSA)";
             // 
             // lblPrivateKey
             // 
             this.lblPrivateKey.AutoSize = true;
-            this.lblPrivateKey.Location = new System.Drawing.Point(6, 64);
+            this.lblPrivateKey.Location = new System.Drawing.Point(344, 9);
             this.lblPrivateKey.Name = "lblPrivateKey";
             this.lblPrivateKey.Size = new System.Drawing.Size(67, 13);
             this.lblPrivateKey.TabIndex = 27;
@@ -315,35 +315,37 @@
             // 
             // textBoxPrivateKey
             // 
-            this.textBoxPrivateKey.Location = new System.Drawing.Point(79, 61);
+            this.textBoxPrivateKey.Location = new System.Drawing.Point(261, 25);
             this.textBoxPrivateKey.Multiline = true;
             this.textBoxPrivateKey.Name = "textBoxPrivateKey";
-            this.textBoxPrivateKey.Size = new System.Drawing.Size(332, 46);
+            this.textBoxPrivateKey.Size = new System.Drawing.Size(236, 131);
             this.textBoxPrivateKey.TabIndex = 26;
             // 
             // btnDecryptRSA
             // 
-            this.btnDecryptRSA.Location = new System.Drawing.Point(286, 156);
+            this.btnDecryptRSA.Location = new System.Drawing.Point(392, 162);
             this.btnDecryptRSA.Name = "btnDecryptRSA";
             this.btnDecryptRSA.Size = new System.Drawing.Size(105, 59);
             this.btnDecryptRSA.TabIndex = 25;
             this.btnDecryptRSA.Text = "Dekriptiraj";
             this.btnDecryptRSA.UseVisualStyleBackColor = true;
+            this.btnDecryptRSA.Click += new System.EventHandler(this.btnDecryptRSA_Click);
             // 
             // btnCryptRSA
             // 
-            this.btnCryptRSA.Location = new System.Drawing.Point(175, 156);
+            this.btnCryptRSA.Location = new System.Drawing.Point(281, 162);
             this.btnCryptRSA.Name = "btnCryptRSA";
             this.btnCryptRSA.Size = new System.Drawing.Size(105, 59);
             this.btnCryptRSA.TabIndex = 24;
             this.btnCryptRSA.Text = "Kriptiraj";
             this.btnCryptRSA.UseVisualStyleBackColor = true;
+            this.btnCryptRSA.Click += new System.EventHandler(this.btnCryptRSA_Click);
             // 
             // btnClearRSAKeys
             // 
-            this.btnClearRSAKeys.Location = new System.Drawing.Point(364, 113);
+            this.btnClearRSAKeys.Location = new System.Drawing.Point(127, 191);
             this.btnClearRSAKeys.Name = "btnClearRSAKeys";
-            this.btnClearRSAKeys.Size = new System.Drawing.Size(133, 24);
+            this.btnClearRSAKeys.Size = new System.Drawing.Size(120, 24);
             this.btnClearRSAKeys.TabIndex = 23;
             this.btnClearRSAKeys.Text = "Isprazni text box";
             this.btnClearRSAKeys.UseVisualStyleBackColor = true;
@@ -351,9 +353,9 @@
             // 
             // btnSaveRSAKeys
             // 
-            this.btnSaveRSAKeys.Location = new System.Drawing.Point(232, 113);
+            this.btnSaveRSAKeys.Location = new System.Drawing.Point(9, 191);
             this.btnSaveRSAKeys.Name = "btnSaveRSAKeys";
-            this.btnSaveRSAKeys.Size = new System.Drawing.Size(126, 24);
+            this.btnSaveRSAKeys.Size = new System.Drawing.Size(112, 24);
             this.btnSaveRSAKeys.TabIndex = 22;
             this.btnSaveRSAKeys.Text = "Spremi par ključeva";
             this.btnSaveRSAKeys.UseVisualStyleBackColor = true;
@@ -362,7 +364,7 @@
             // lblPublicKey
             // 
             this.lblPublicKey.AutoSize = true;
-            this.lblPublicKey.Location = new System.Drawing.Point(6, 12);
+            this.lblPublicKey.Location = new System.Drawing.Point(98, 3);
             this.lblPublicKey.Name = "lblPublicKey";
             this.lblPublicKey.Size = new System.Drawing.Size(58, 13);
             this.lblPublicKey.TabIndex = 21;
@@ -370,9 +372,9 @@
             // 
             // btnOpenRSAKeys
             // 
-            this.btnOpenRSAKeys.Location = new System.Drawing.Point(79, 113);
+            this.btnOpenRSAKeys.Location = new System.Drawing.Point(9, 162);
             this.btnOpenRSAKeys.Name = "btnOpenRSAKeys";
-            this.btnOpenRSAKeys.Size = new System.Drawing.Size(147, 24);
+            this.btnOpenRSAKeys.Size = new System.Drawing.Size(112, 24);
             this.btnOpenRSAKeys.TabIndex = 20;
             this.btnOpenRSAKeys.Text = "Učitaj ključeve";
             this.btnOpenRSAKeys.UseVisualStyleBackColor = true;
@@ -380,17 +382,17 @@
             // 
             // textBoxPublicKey
             // 
-            this.textBoxPublicKey.Location = new System.Drawing.Point(79, 9);
+            this.textBoxPublicKey.Location = new System.Drawing.Point(6, 25);
             this.textBoxPublicKey.Multiline = true;
             this.textBoxPublicKey.Name = "textBoxPublicKey";
-            this.textBoxPublicKey.Size = new System.Drawing.Size(332, 46);
+            this.textBoxPublicKey.Size = new System.Drawing.Size(241, 131);
             this.textBoxPublicKey.TabIndex = 19;
             // 
             // btnGenerateKeyPairsRSA
             // 
-            this.btnGenerateKeyPairsRSA.Location = new System.Drawing.Point(417, 12);
+            this.btnGenerateKeyPairsRSA.Location = new System.Drawing.Point(127, 162);
             this.btnGenerateKeyPairsRSA.Name = "btnGenerateKeyPairsRSA";
-            this.btnGenerateKeyPairsRSA.Size = new System.Drawing.Size(80, 95);
+            this.btnGenerateKeyPairsRSA.Size = new System.Drawing.Size(120, 24);
             this.btnGenerateKeyPairsRSA.TabIndex = 18;
             this.btnGenerateKeyPairsRSA.Text = "Generiraj par ključeva";
             this.btnGenerateKeyPairsRSA.UseVisualStyleBackColor = true;
