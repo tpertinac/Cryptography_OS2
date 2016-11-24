@@ -62,6 +62,12 @@
             this.textBoxPublicKey = new System.Windows.Forms.TextBox();
             this.btnGenerateKeyPairsRSA = new System.Windows.Forms.Button();
             this.btnClearAll = new System.Windows.Forms.Button();
+            this.btnDigitalSignature = new System.Windows.Forms.Button();
+            this.btnCheckDigitalSignature = new System.Windows.Forms.Button();
+            this.textBoxDigitalSignature = new System.Windows.Forms.TextBox();
+            this.textBoxHash = new System.Windows.Forms.TextBox();
+            this.btnCheckHash = new System.Windows.Forms.Button();
+            this.btnCreateHash = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabAES.SuspendLayout();
@@ -88,9 +94,9 @@
             // 
             // btnOpenSecretKey
             // 
-            this.btnOpenSecretKey.Location = new System.Drawing.Point(175, 32);
+            this.btnOpenSecretKey.Location = new System.Drawing.Point(6, 125);
             this.btnOpenSecretKey.Name = "btnOpenSecretKey";
-            this.btnOpenSecretKey.Size = new System.Drawing.Size(105, 24);
+            this.btnOpenSecretKey.Size = new System.Drawing.Size(104, 47);
             this.btnOpenSecretKey.TabIndex = 4;
             this.btnOpenSecretKey.Text = "Učitaj tajni ključ";
             this.btnOpenSecretKey.UseVisualStyleBackColor = true;
@@ -98,16 +104,17 @@
             // 
             // textBoxAesKey
             // 
-            this.textBoxAesKey.Location = new System.Drawing.Point(67, 6);
+            this.textBoxAesKey.Location = new System.Drawing.Point(116, 19);
+            this.textBoxAesKey.Multiline = true;
             this.textBoxAesKey.Name = "textBoxAesKey";
-            this.textBoxAesKey.Size = new System.Drawing.Size(430, 20);
+            this.textBoxAesKey.Size = new System.Drawing.Size(270, 206);
             this.textBoxAesKey.TabIndex = 3;
             // 
             // btnGenerateSecretKey
             // 
-            this.btnGenerateSecretKey.Location = new System.Drawing.Point(67, 32);
+            this.btnGenerateSecretKey.Location = new System.Drawing.Point(6, 19);
             this.btnGenerateSecretKey.Name = "btnGenerateSecretKey";
-            this.btnGenerateSecretKey.Size = new System.Drawing.Size(105, 24);
+            this.btnGenerateSecretKey.Size = new System.Drawing.Size(104, 47);
             this.btnGenerateSecretKey.TabIndex = 0;
             this.btnGenerateSecretKey.Text = "Generiraj tajni ključ";
             this.btnGenerateSecretKey.UseVisualStyleBackColor = true;
@@ -224,21 +231,21 @@
             this.tabAES.Controls.Add(this.btnClearSecretKeyTextBox);
             this.tabAES.Controls.Add(this.btnSaveSecretKey);
             this.tabAES.Controls.Add(this.lblSecretKeyAes);
+            this.tabAES.Controls.Add(this.btnGenerateSecretKey);
             this.tabAES.Controls.Add(this.btnOpenSecretKey);
             this.tabAES.Controls.Add(this.textBoxAesKey);
-            this.tabAES.Controls.Add(this.btnGenerateSecretKey);
             this.tabAES.Location = new System.Drawing.Point(4, 25);
             this.tabAES.Name = "tabAES";
             this.tabAES.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAES.Size = new System.Drawing.Size(507, 243);
+            this.tabAES.Size = new System.Drawing.Size(507, 231);
             this.tabAES.TabIndex = 0;
             this.tabAES.Text = "Simetrično(AES)";
             // 
             // btnAesDecrypt
             // 
-            this.btnAesDecrypt.Location = new System.Drawing.Point(286, 62);
+            this.btnAesDecrypt.Location = new System.Drawing.Point(392, 125);
             this.btnAesDecrypt.Name = "btnAesDecrypt";
-            this.btnAesDecrypt.Size = new System.Drawing.Size(105, 59);
+            this.btnAesDecrypt.Size = new System.Drawing.Size(105, 100);
             this.btnAesDecrypt.TabIndex = 17;
             this.btnAesDecrypt.Text = "Dekriptiraj";
             this.btnAesDecrypt.UseVisualStyleBackColor = true;
@@ -246,9 +253,9 @@
             // 
             // btnAesCrypt
             // 
-            this.btnAesCrypt.Location = new System.Drawing.Point(175, 62);
+            this.btnAesCrypt.Location = new System.Drawing.Point(392, 19);
             this.btnAesCrypt.Name = "btnAesCrypt";
-            this.btnAesCrypt.Size = new System.Drawing.Size(105, 59);
+            this.btnAesCrypt.Size = new System.Drawing.Size(105, 100);
             this.btnAesCrypt.TabIndex = 16;
             this.btnAesCrypt.Text = "Kriptiraj";
             this.btnAesCrypt.UseVisualStyleBackColor = true;
@@ -256,9 +263,9 @@
             // 
             // btnClearSecretKeyTextBox
             // 
-            this.btnClearSecretKeyTextBox.Location = new System.Drawing.Point(397, 32);
+            this.btnClearSecretKeyTextBox.Location = new System.Drawing.Point(6, 178);
             this.btnClearSecretKeyTextBox.Name = "btnClearSecretKeyTextBox";
-            this.btnClearSecretKeyTextBox.Size = new System.Drawing.Size(100, 24);
+            this.btnClearSecretKeyTextBox.Size = new System.Drawing.Size(104, 47);
             this.btnClearSecretKeyTextBox.TabIndex = 15;
             this.btnClearSecretKeyTextBox.Text = "Isprazni text box";
             this.btnClearSecretKeyTextBox.UseVisualStyleBackColor = true;
@@ -266,9 +273,9 @@
             // 
             // btnSaveSecretKey
             // 
-            this.btnSaveSecretKey.Location = new System.Drawing.Point(286, 32);
+            this.btnSaveSecretKey.Location = new System.Drawing.Point(6, 72);
             this.btnSaveSecretKey.Name = "btnSaveSecretKey";
-            this.btnSaveSecretKey.Size = new System.Drawing.Size(105, 24);
+            this.btnSaveSecretKey.Size = new System.Drawing.Size(104, 47);
             this.btnSaveSecretKey.TabIndex = 6;
             this.btnSaveSecretKey.Text = "Spremi tajni ključ";
             this.btnSaveSecretKey.UseVisualStyleBackColor = true;
@@ -277,7 +284,7 @@
             // lblSecretKeyAes
             // 
             this.lblSecretKeyAes.AutoSize = true;
-            this.lblSecretKeyAes.Location = new System.Drawing.Point(6, 9);
+            this.lblSecretKeyAes.Location = new System.Drawing.Point(229, 3);
             this.lblSecretKeyAes.Name = "lblSecretKeyAes";
             this.lblSecretKeyAes.Size = new System.Drawing.Size(55, 13);
             this.lblSecretKeyAes.TabIndex = 5;
@@ -307,7 +314,7 @@
             // lblPrivateKey
             // 
             this.lblPrivateKey.AutoSize = true;
-            this.lblPrivateKey.Location = new System.Drawing.Point(344, 9);
+            this.lblPrivateKey.Location = new System.Drawing.Point(302, 3);
             this.lblPrivateKey.Name = "lblPrivateKey";
             this.lblPrivateKey.Size = new System.Drawing.Size(67, 13);
             this.lblPrivateKey.TabIndex = 27;
@@ -315,17 +322,17 @@
             // 
             // textBoxPrivateKey
             // 
-            this.textBoxPrivateKey.Location = new System.Drawing.Point(261, 25);
+            this.textBoxPrivateKey.Location = new System.Drawing.Point(262, 19);
             this.textBoxPrivateKey.Multiline = true;
             this.textBoxPrivateKey.Name = "textBoxPrivateKey";
-            this.textBoxPrivateKey.Size = new System.Drawing.Size(236, 131);
+            this.textBoxPrivateKey.Size = new System.Drawing.Size(147, 200);
             this.textBoxPrivateKey.TabIndex = 26;
             // 
             // btnDecryptRSA
             // 
-            this.btnDecryptRSA.Location = new System.Drawing.Point(392, 162);
+            this.btnDecryptRSA.Location = new System.Drawing.Point(415, 121);
             this.btnDecryptRSA.Name = "btnDecryptRSA";
-            this.btnDecryptRSA.Size = new System.Drawing.Size(105, 59);
+            this.btnDecryptRSA.Size = new System.Drawing.Size(82, 98);
             this.btnDecryptRSA.TabIndex = 25;
             this.btnDecryptRSA.Text = "Dekriptiraj";
             this.btnDecryptRSA.UseVisualStyleBackColor = true;
@@ -333,9 +340,9 @@
             // 
             // btnCryptRSA
             // 
-            this.btnCryptRSA.Location = new System.Drawing.Point(281, 162);
+            this.btnCryptRSA.Location = new System.Drawing.Point(415, 19);
             this.btnCryptRSA.Name = "btnCryptRSA";
-            this.btnCryptRSA.Size = new System.Drawing.Size(105, 59);
+            this.btnCryptRSA.Size = new System.Drawing.Size(82, 96);
             this.btnCryptRSA.TabIndex = 24;
             this.btnCryptRSA.Text = "Kriptiraj";
             this.btnCryptRSA.UseVisualStyleBackColor = true;
@@ -343,9 +350,9 @@
             // 
             // btnClearRSAKeys
             // 
-            this.btnClearRSAKeys.Location = new System.Drawing.Point(127, 191);
+            this.btnClearRSAKeys.Location = new System.Drawing.Point(5, 174);
             this.btnClearRSAKeys.Name = "btnClearRSAKeys";
-            this.btnClearRSAKeys.Size = new System.Drawing.Size(120, 24);
+            this.btnClearRSAKeys.Size = new System.Drawing.Size(97, 45);
             this.btnClearRSAKeys.TabIndex = 23;
             this.btnClearRSAKeys.Text = "Isprazni text box";
             this.btnClearRSAKeys.UseVisualStyleBackColor = true;
@@ -353,9 +360,9 @@
             // 
             // btnSaveRSAKeys
             // 
-            this.btnSaveRSAKeys.Location = new System.Drawing.Point(9, 191);
+            this.btnSaveRSAKeys.Location = new System.Drawing.Point(5, 70);
             this.btnSaveRSAKeys.Name = "btnSaveRSAKeys";
-            this.btnSaveRSAKeys.Size = new System.Drawing.Size(112, 24);
+            this.btnSaveRSAKeys.Size = new System.Drawing.Size(97, 45);
             this.btnSaveRSAKeys.TabIndex = 22;
             this.btnSaveRSAKeys.Text = "Spremi par ključeva";
             this.btnSaveRSAKeys.UseVisualStyleBackColor = true;
@@ -364,7 +371,7 @@
             // lblPublicKey
             // 
             this.lblPublicKey.AutoSize = true;
-            this.lblPublicKey.Location = new System.Drawing.Point(98, 3);
+            this.lblPublicKey.Location = new System.Drawing.Point(152, 3);
             this.lblPublicKey.Name = "lblPublicKey";
             this.lblPublicKey.Size = new System.Drawing.Size(58, 13);
             this.lblPublicKey.TabIndex = 21;
@@ -372,9 +379,9 @@
             // 
             // btnOpenRSAKeys
             // 
-            this.btnOpenRSAKeys.Location = new System.Drawing.Point(9, 162);
+            this.btnOpenRSAKeys.Location = new System.Drawing.Point(5, 121);
             this.btnOpenRSAKeys.Name = "btnOpenRSAKeys";
-            this.btnOpenRSAKeys.Size = new System.Drawing.Size(112, 24);
+            this.btnOpenRSAKeys.Size = new System.Drawing.Size(97, 45);
             this.btnOpenRSAKeys.TabIndex = 20;
             this.btnOpenRSAKeys.Text = "Učitaj ključeve";
             this.btnOpenRSAKeys.UseVisualStyleBackColor = true;
@@ -382,17 +389,17 @@
             // 
             // textBoxPublicKey
             // 
-            this.textBoxPublicKey.Location = new System.Drawing.Point(6, 25);
+            this.textBoxPublicKey.Location = new System.Drawing.Point(108, 19);
             this.textBoxPublicKey.Multiline = true;
             this.textBoxPublicKey.Name = "textBoxPublicKey";
-            this.textBoxPublicKey.Size = new System.Drawing.Size(241, 131);
+            this.textBoxPublicKey.Size = new System.Drawing.Size(147, 200);
             this.textBoxPublicKey.TabIndex = 19;
             // 
             // btnGenerateKeyPairsRSA
             // 
-            this.btnGenerateKeyPairsRSA.Location = new System.Drawing.Point(127, 162);
+            this.btnGenerateKeyPairsRSA.Location = new System.Drawing.Point(6, 19);
             this.btnGenerateKeyPairsRSA.Name = "btnGenerateKeyPairsRSA";
-            this.btnGenerateKeyPairsRSA.Size = new System.Drawing.Size(120, 24);
+            this.btnGenerateKeyPairsRSA.Size = new System.Drawing.Size(96, 45);
             this.btnGenerateKeyPairsRSA.TabIndex = 18;
             this.btnGenerateKeyPairsRSA.Text = "Generiraj par ključeva";
             this.btnGenerateKeyPairsRSA.UseVisualStyleBackColor = true;
@@ -400,19 +407,81 @@
             // 
             // btnClearAll
             // 
-            this.btnClearAll.Location = new System.Drawing.Point(373, 365);
+            this.btnClearAll.Location = new System.Drawing.Point(376, 365);
             this.btnClearAll.Name = "btnClearAll";
-            this.btnClearAll.Size = new System.Drawing.Size(216, 30);
+            this.btnClearAll.Size = new System.Drawing.Size(132, 30);
             this.btnClearAll.TabIndex = 15;
             this.btnClearAll.Text = "Isprazni sve text boxove";
             this.btnClearAll.UseVisualStyleBackColor = true;
             this.btnClearAll.Click += new System.EventHandler(this.btnClearAll_Click);
+            // 
+            // btnDigitalSignature
+            // 
+            this.btnDigitalSignature.Location = new System.Drawing.Point(204, 329);
+            this.btnDigitalSignature.Name = "btnDigitalSignature";
+            this.btnDigitalSignature.Size = new System.Drawing.Size(104, 30);
+            this.btnDigitalSignature.TabIndex = 16;
+            this.btnDigitalSignature.Text = "Potpiši pourku";
+            this.btnDigitalSignature.UseVisualStyleBackColor = true;
+            this.btnDigitalSignature.Click += new System.EventHandler(this.btnDigitalSignature_Click);
+            // 
+            // btnCheckDigitalSignature
+            // 
+            this.btnCheckDigitalSignature.Location = new System.Drawing.Point(590, 329);
+            this.btnCheckDigitalSignature.Name = "btnCheckDigitalSignature";
+            this.btnCheckDigitalSignature.Size = new System.Drawing.Size(105, 30);
+            this.btnCheckDigitalSignature.TabIndex = 17;
+            this.btnCheckDigitalSignature.Text = "Provjeri potpis";
+            this.btnCheckDigitalSignature.UseVisualStyleBackColor = true;
+            this.btnCheckDigitalSignature.Click += new System.EventHandler(this.btnCheckDigitalSignature_Click);
+            // 
+            // textBoxDigitalSignature
+            // 
+            this.textBoxDigitalSignature.Location = new System.Drawing.Point(314, 329);
+            this.textBoxDigitalSignature.Multiline = true;
+            this.textBoxDigitalSignature.Name = "textBoxDigitalSignature";
+            this.textBoxDigitalSignature.Size = new System.Drawing.Size(270, 30);
+            this.textBoxDigitalSignature.TabIndex = 18;
+            // 
+            // textBoxHash
+            // 
+            this.textBoxHash.Location = new System.Drawing.Point(314, 293);
+            this.textBoxHash.Multiline = true;
+            this.textBoxHash.Name = "textBoxHash";
+            this.textBoxHash.Size = new System.Drawing.Size(270, 30);
+            this.textBoxHash.TabIndex = 21;
+            // 
+            // btnCheckHash
+            // 
+            this.btnCheckHash.Location = new System.Drawing.Point(590, 293);
+            this.btnCheckHash.Name = "btnCheckHash";
+            this.btnCheckHash.Size = new System.Drawing.Size(105, 30);
+            this.btnCheckHash.TabIndex = 20;
+            this.btnCheckHash.Text = "Provjeri sažetak";
+            this.btnCheckHash.UseVisualStyleBackColor = true;
+            this.btnCheckHash.Click += new System.EventHandler(this.btnCheckHash_Click);
+            // 
+            // btnCreateHash
+            // 
+            this.btnCreateHash.Location = new System.Drawing.Point(204, 293);
+            this.btnCreateHash.Name = "btnCreateHash";
+            this.btnCreateHash.Size = new System.Drawing.Size(104, 30);
+            this.btnCreateHash.TabIndex = 19;
+            this.btnCreateHash.Text = "Napravi sažetak";
+            this.btnCreateHash.UseVisualStyleBackColor = true;
+            this.btnCreateHash.Click += new System.EventHandler(this.btnCreateHash_Click);
             // 
             // Cryptography
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(899, 423);
+            this.Controls.Add(this.textBoxHash);
+            this.Controls.Add(this.btnCheckHash);
+            this.Controls.Add(this.btnCreateHash);
+            this.Controls.Add(this.textBoxDigitalSignature);
+            this.Controls.Add(this.btnCheckDigitalSignature);
+            this.Controls.Add(this.btnDigitalSignature);
             this.Controls.Add(this.btnClearAll);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.textBoxCryptoText);
@@ -477,6 +546,12 @@
         private System.Windows.Forms.Button btnOpenRSAKeys;
         private System.Windows.Forms.TextBox textBoxPublicKey;
         private System.Windows.Forms.Button btnGenerateKeyPairsRSA;
+        private System.Windows.Forms.Button btnDigitalSignature;
+        private System.Windows.Forms.Button btnCheckDigitalSignature;
+        private System.Windows.Forms.TextBox textBoxDigitalSignature;
+        private System.Windows.Forms.TextBox textBoxHash;
+        private System.Windows.Forms.Button btnCheckHash;
+        private System.Windows.Forms.Button btnCreateHash;
     }
 }
 

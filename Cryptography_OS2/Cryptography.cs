@@ -33,7 +33,7 @@ namespace Cryptography_OS2
 
             if (!File.Exists(path))
             {
-                toolStripStatusLabel1.Text = "Datoteka " + textfile+ " ne postoji!";
+                toolStripStatusLabel1.Text = "Datoteka " + textfile + " ne postoji!";
                 return fulltext;
             }
             else
@@ -41,7 +41,7 @@ namespace Cryptography_OS2
                 StreamReader sr = new StreamReader(path);
                 fulltext = sr.ReadToEnd();
                 sr.Close();
-                toolStripStatusLabel1.Text = "Datoteka "+ textfile+ " je ucitana!";
+                toolStripStatusLabel1.Text = "Datoteka " + textfile + " je ucitana!";
                 return fulltext;
             }
         }
@@ -63,6 +63,8 @@ namespace Cryptography_OS2
             textBoxCryptoText.Clear();
             textBoxPublicKey.Clear();
             textBoxPrivateKey.Clear();
+            textBoxHash.Clear();
+            textBoxDigitalSignature.Clear();
         }
 
         //Lijeva strana
@@ -93,7 +95,7 @@ namespace Cryptography_OS2
         //Desna strana
         private void btnOpenCryptoText_Click(object sender, EventArgs e)
         {
-           textBoxCryptoText.Text = Open_Text("kriptirani_tekst.txt");
+            textBoxCryptoText.Text = Open_Text("kriptirani_tekst.txt");
         }
 
         private void btnSaveCryptoText_Click(object sender, EventArgs e)
@@ -211,7 +213,7 @@ namespace Cryptography_OS2
                         return;
                     }
                     Save_Text("kriptirani_tekst.txt", textBoxCryptoText.Text);
-                    toolStripStatusLabel1.Text = "Tekst kriptiran i pospremljen";
+                    toolStripStatusLabel1.Text = "Tekst je kriptiran i pospremljen";
                 }
             }
         }
@@ -375,7 +377,7 @@ namespace Cryptography_OS2
                 textBoxPrivateKey.Text = privkey;
 
                 decryptedText = CryptoHelper.Decrypt(cryptedtext, "RecipientID", privatekey);
-                if(String.IsNullOrEmpty(decryptedText)) return;
+                if (String.IsNullOrEmpty(decryptedText)) return;
             }
             catch (Exception)
             {
@@ -393,5 +395,163 @@ namespace Cryptography_OS2
             textBoxCleanText.Text = decryptedText;
         }
 
+
+        //SHA 256
+
+       
+        //Funkcija za stvaranje sažetka pomoću sha256
+        public byte[] Hash(string text)
+        {
+            byte[] textbytes = Encoding.ASCII.GetBytes(text);
+            byte[] hash = new SHA256Managed().ComputeHash(textbytes);
+            return hash;
+        }
+
+        //Funkcija za provjeru sažetka
+        public async Task checkHash(string text)
+        {
+            byte[] hashtocheck = Hash(text);
+            SoapHexBinary hth = new SoapHexBinary(hashtocheck);
+
+            string realhash = Open_Text("sazetak.txt");
+            if (String.IsNullOrEmpty(realhash))
+            {
+                toolStripStatusLabel1.Text = "Datoteka sazetak.txt ne postoji ili je prazna!";
+                return;
+            }
+
+            if (realhash == hth.ToString())
+            {
+                textBoxHash.Text = realhash;
+                textBoxHash.BackColor = Color.Green;
+                toolStripStatusLabel1.Text = "Sažetak je u redu!";
+                await Task.Delay(2000);
+                textBoxHash.BackColor = Color.White;
+                SoapHexBinary rhtb = SoapHexBinary.Parse(realhash);
+            }
+            else
+            {
+                textBoxHash.Text = hth.ToString();
+                textBoxHash.BackColor = Color.Red;
+                toolStripStatusLabel1.Text = "Sažetak nije u redu! Provjerite orginalnu datoteku!";
+                await Task.Delay(2000);
+                textBoxHash.BackColor = Color.White;
+            }
+        }
+
+        //Button funkcionalnost za stvaranje sažetka teksta
+        private void btnCreateHash_Click(object sender, EventArgs e)
+        {
+            string cleantext = Open_Text("cisti_tekst.txt");
+            if (String.IsNullOrEmpty(cleantext))
+            {
+                toolStripStatusLabel1.Text = "Datoteka cisti_tekts.txt ne postoji ili je prazna!";
+                return;
+            }
+            byte[] hash = Hash(cleantext);
+            SoapHexBinary hth = new SoapHexBinary(hash);
+            Save_Text("sazetak.txt", hth.ToString());
+            textBoxHash.Text = hth.ToString();
+            toolStripStatusLabel1.Text = "Sažetak je napravljen, spremljen i učitan!";
+        }
+
+        //Button funkcionlanost za provjeru sažetka
+        private async void btnCheckHash_Click(object sender, EventArgs e)
+        {
+            string cleantext = Open_Text("cisti_tekst.txt");
+            if (String.IsNullOrEmpty(cleantext))
+            {
+                toolStripStatusLabel1.Text = "Datoteka cisti_tekts.txt ne postoji ili je prazna!";
+                return;
+            }
+            await checkHash(cleantext);
+        }
+
+        //Digitalni potpis
+
+        //Funkcija za potpisivanje i provjeru potpisa
+        public async void SignAndVerify(int btnID)
+        {
+            string cleantext = Open_Text("cisti_tekst.txt");
+            if (String.IsNullOrEmpty(cleantext))
+            {
+                toolStripStatusLabel1.Text = "Datoteka cisti_tekts.txt ne postoji ili je prazna!";
+                return;
+            }
+            textBoxCleanText.Text = cleantext;
+            byte[] ct = Encoding.ASCII.GetBytes(cleantext);
+
+            string privkey = Open_Text("privatni_kljuc.txt");
+            if (String.IsNullOrEmpty(privkey)) return;
+            textBoxPrivateKey.Text = privkey;
+            byte[] privatekey = Encoding.ASCII.GetBytes(privkey);
+
+            string pubkey = Open_Text("javni_kljuc.txt");
+            if (String.IsNullOrEmpty(pubkey)) return;
+            textBoxPublicKey.Text = pubkey;
+            byte[] publickey = Encoding.ASCII.GetBytes(pubkey);
+
+            using (var signer = new VirgilSigner(Virgil.Crypto.Foundation.VirgilHash.Algorithm.SHA256))
+            {
+                if (btnID == 1)
+                {
+                    var DigitalSignature = signer.Sign(ct, privatekey);
+
+                    SoapHexBinary dsth = new SoapHexBinary(DigitalSignature);
+                    Save_Text("digitalni_potpis.txt", dsth.ToString());
+
+                    textBoxDigitalSignature.Text = dsth.ToString();
+                    toolStripStatusLabel1.Text = "Datoteka je potpisana!";
+                }
+                if (btnID == 2)
+                {
+                    bool VerifySignature;
+                    string ds = Open_Text("digitalni_potpis.txt");
+                    if (String.IsNullOrEmpty(ds)) return;
+                    SoapHexBinary dstb = SoapHexBinary.Parse(ds);
+
+                    string tbds = textBoxDigitalSignature.Text;
+                    if (String.IsNullOrEmpty(tbds)) textBoxDigitalSignature.Text = ds;
+
+                    try
+                    {
+                        VerifySignature = signer.Verify(ct, dstb.Value, publickey);
+                    }
+                    catch (Exception) {
+                        toolStripStatusLabel1.Text = "Došlo je do greške!";
+                        textBoxDigitalSignature.BackColor = Color.Red;
+                        await Task.Delay(2000);
+                        textBoxDigitalSignature.BackColor = Color.White;
+                        return;
+                    }
+    
+                    if (VerifySignature)
+                    {
+                        toolStripStatusLabel1.Text = "Digitalni potpis je uspješno provjeren!";
+                        textBoxDigitalSignature.BackColor = Color.Green;
+                        await Task.Delay(2000);
+                        textBoxDigitalSignature.BackColor = Color.White;
+                    }
+                    else
+                    {
+                        toolStripStatusLabel1.Text = "Došlo je do greške";
+                        textBoxDigitalSignature.BackColor = Color.Red;
+                        await Task.Delay(2000);
+                        textBoxDigitalSignature.BackColor = Color.White;
+                    }
+                }
+            }
+        }
+        private void btnDigitalSignature_Click(object sender, EventArgs e)
+        {
+            SignAndVerify(1);
+
+        }
+
+        //Provjera digitalnog potpisa
+        private void btnCheckDigitalSignature_Click(object sender, EventArgs e)
+        {
+            SignAndVerify(2);
+        }
     }
 }
