@@ -495,8 +495,16 @@ namespace Cryptography_OS2
             {
                 if (btnID == 1)
                 {
-                    var DigitalSignature = signer.Sign(ct, privatekey);
-
+                    byte[] DigitalSignature;
+                    try
+                    {
+                        DigitalSignature = signer.Sign(ct, privatekey);
+                    }
+                    catch (Exception)
+                    {
+                        toolStripStatusLabel1.Text = "Doslo je do greske!";
+                        return;
+                    }
                     SoapHexBinary dsth = new SoapHexBinary(DigitalSignature);
                     Save_Text("digitalni_potpis.txt", dsth.ToString());
 
